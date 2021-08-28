@@ -1,0 +1,30 @@
+- name: Creating the sanux app directory
+  file: path={{item}} state=directory
+  with_items:
+    - /opt/sanux
+    - /opt/sanux/logs
+    - /opt/sanux/conf
+  register: creating_directories
+
+- name: Copying the app's deployment file to the host
+  template:
+    src: app-v1.yml.j2
+    dest: /opt/sanux/app-v1.yml
+    owner: root
+    group: root
+    mode: 0644
+  register: copying_template
+
+- name: Copying the app's service file to the host
+  copy: src={{ item.src }} dest={{ item.dest }}
+  with_items:
+    - { src: 'service-app.yml', dest: '/opt/sanux/service-app.yml' }
+  register: copying_service_file
+
+- name: Creating the sanux App Deployment
+  shell: kubectl apply -f /opt/sanux/app-v1.yml
+  register: deploy_app
+
+- name: Creating the sanux App Service
+  shell: kubectl apply -f /opt/sanux/service-app.yml
+  register: deploy_svc_app

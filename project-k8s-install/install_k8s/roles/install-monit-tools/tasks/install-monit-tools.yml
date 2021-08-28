@@ -1,0 +1,13 @@
+
+- name: Helm add repo1
+  shell: helm repo add prometheus-community {{ get_repo_helm }}
+  register: prometheus_add_repo1
+
+- name: Helm update
+  shell: helm repo update
+  register: prometheus_add_update
+
+- name: Installing Prometheus Operator
+  shell: helm install sanux {{ deploy_prometheus }}
+  register: prometheus_install
+  changed_when: '"Install Complete" in prometheus_install.stdout'

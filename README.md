@@ -24,3 +24,11 @@ https://galaxy.ansible.com/docs/contributing/creating_role.html
 
 https://www.makeareadme.com/
 
+# LinuxTips >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+#Referencia e agradecimento ao Jefersson Noronha
+
+https://www.youtube.com/user/linuxtipscanal
+
+https://github.com/badtuxx
+

@@ -1,0 +1,47 @@
+- name: Installing Docker
+  shell: curl -fsSL https://get.docker.com | bash
+
+- name: Copying daemon.json
+  template:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: 0644
+  register: copy_template
+
+- name: Enable
+  shell: systemctl enable docker
+  register: anable_docker
+
+- name: Daemon-Reload
+  shell: systemctl daemon-reload
+  register: daemon_reload
+
+- name: Restart Docker
+  shell: systemctl restart docker
+  register: restart_docker 
+
+- name: Adding k8s apt repo keys
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: Adding the k8s repo
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+
+- name: Installing the kubeadm, kubelet and kubectl packages
+  apt:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+- name: Auto complete kubectl
+  shell: kubectl completion bash >> ~/.bashrc
+  register: auto_complete 
+
